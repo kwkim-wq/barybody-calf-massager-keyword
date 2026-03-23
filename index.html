@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>종아리마사지기 키워드 분석 보고서</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#f0f4f8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#0f172a;padding:24px 16px;}
+.wrap{max-width:900px;margin:0 auto;}
+.card{background:#fff;border-radius:12px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,0.07);margin-bottom:20px;}
+h1{font-size:2rem;font-weight:800;}
+h2{font-size:1.2rem;font-weight:700;color:#0f172a;margin-bottom:16px;}
+h3{font-size:.9rem;font-weight:600;color:#64748b;margin-bottom:4px;}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.metric-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.07);text-align:center;}
+.metric-val{font-size:1.5rem;font-weight:800;color:#0f172a;margin:8px 0 4px;}
+.metric-label{font-size:.8rem;color:#64748b;}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.75rem;font-weight:600;}
+.badge-green{background:#d1fae5;color:#065f46;}
+.badge-yellow{background:#fef3c7;color:#92400e;}
+.badge-red{background:#fee2e2;color:#991b1b;}
+.badge-blue{background:#e0f2fe;color:#0369a1;}
+.badge-gray{background:#f1f5f9;color:#475569;}
+.insight{background:#f0f9ff;border-left:3px solid #0284c7;padding:12px 16px;border-radius:0 8px 8px 0;margin-top:16px;font-size:.9rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead th{background:#0f172a;color:#fff;padding:10px 12px;text-align:left;white-space:nowrap;}
+tbody td{padding:9px 12px;border-bottom:1px solid #f1f5f9;white-space:nowrap;vertical-align:middle;}
+tbody tr:hover{background:#f8fafc;}
+td.td-title{white-space:normal;min-width:280px;}
+.product-link{color:#0f172a;text-decoration:none;}
+.product-link:hover{color:#0284c7;text-decoration:underline;}
+.sortable{cursor:pointer;user-select:none;}
+.sortable::after{content:'⇅';margin-left:4px;opacity:.5;}
+.sortable.asc::after{content:'▲';opacity:1;}
+.sortable.desc::after{content:'▼';opacity:1;}
+.rel-table thead th{background:#334155;}
+.rel-highlight td{background:#eff6ff;font-weight:600;}
+.score-table td,.score-table th{text-align:center;}
+.section-full{max-width:none!important;}
+.chart-wrap{position:relative;height:280px;}
+.chart-wrap-sm{position:relative;height:220px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+@media(max-width:640px){.metrics{grid-template-columns:repeat(2,1fr);}.grid2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- 1. 헤더 -->
+<div class="card" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);color:#fff;margin-bottom:20px;">
+  <h1 style="color:#fff;">종아리마사지기</h1>
+  <p style="color:#94a3b8;margin-top:8px;font-size:.9rem;">키워드 종합 분석 보고서</p>
+  <p style="color:#64748b;font-size:.8rem;margin-top:4px;">분석일: 2026-03-23 &nbsp;|&nbsp; 데이터 기준일: 2026-03-22</p>
+</div>
+
+<!-- 2. 핵심 지표 -->
+<div class="metrics">
+  <div class="metric-card">
+    <h3>상품수</h3>
+    <div class="metric-val">115,806<span style="font-size:1rem;color:#64748b;">개</span></div>
+  </div>
+  <div class="metric-card">
+    <h3>월 검색수</h3>
+    <div class="metric-val">30,350<span style="font-size:1rem;color:#64748b;">회</span></div>
+    <div class="metric-label">PC 5,350 / 모바일 25,000</div>
+  </div>
+  <div class="metric-card">
+    <h3>경쟁강도</h3>
+    <div class="metric-val">3.82</div>
+    <span class="badge badge-green">좋음 (B)</span>
+  </div>
+  <div class="metric-card">
+    <h3>Top10 매출 (6개월)</h3>
+    <div class="metric-val" style="font-size:1.3rem;">8.1천만원</div>
+    <div class="metric-label">네이버페이 결제 기준</div>
+  </div>
+</div>
+
+<!-- 3. 트렌드 분석 -->
+<div class="card">
+  <h2>트렌드 분석 (3년)</h2>
+  <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+  <div class="insight">
+    <strong>📈 트렌드: 하락 (-44.9%)</strong><br>
+    최근 3개월 평균 28113회 vs 전년 동기 51063회. 전년 대비 44.9% 감소 추세.
+  </div>
+</div>
+
+<!-- 3-1. 연관 키워드 -->
+<div class="card">
+  <h2>연관 키워드 비교</h2>
+  <table class="rel-table">
+    <thead><tr><th>키워드</th><th>월 검색수</th><th>상품수</th><th>경쟁강도</th><th>Top10 매출 (6개월)</th></tr></thead>
+    <tbody><tr class="rel-highlight"><td>종아리마사지기 <span class="badge badge-blue">분석 대상</span></td><td>30,350</td><td>115,806</td><td><span class="badge badge-green">좋음 (B)</span></td><td>8.1천만원</td></tr><tr><td>발종아리마사지기</td><td>500</td><td>67,301</td><td><span class="badge badge-red">아주나쁨 (E)</span></td><td>-</td></tr>
+<tr><td>발 종아리 마사지기</td><td>500</td><td>67,301</td><td><span class="badge badge-red">아주나쁨 (E)</span></td><td>-</td></tr>
+<tr><td>종아리 마사지 기계</td><td>250</td><td>6,898</td><td><span class="badge badge-red">나쁨 (D)</span></td><td>-</td></tr>
+<tr><td>손목마사지기</td><td>24,820</td><td>34,089</td><td><span class="badge badge-green">아주좋음 (A)</span></td><td>2.7억원</td></tr>
+<tr><td>허리마사지기</td><td>11,990</td><td>144,117</td><td><span class="badge badge-yellow">보통 (C)</span></td><td>1.8억원</td></tr></tbody>
+  </table>
+</div>
+
+<!-- 3-2. 시즌성 -->
+<div class="card">
+  <h2>시즌성 분석</h2>
+  <div class="chart-wrap"><canvas id="seasonChart"></canvas></div>
+  <div class="insight">
+    <strong>성수기:</strong> 4월(128), 5월(131)<br>
+    <strong>비수기:</strong> 2월(78)
+  </div>
+</div>
+
+<!-- 4. 시장 현황 -->
+<div class="card">
+  <h2>시장 현황 (6개월 네이버페이 기준)</h2>
+  <table>
+    <thead><tr><th>구분</th><th>6개월 매출</th><th>6개월 판매량</th><th>평균 가격</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Top 10</strong></td><td>8.1천만원</td><td>829개</td><td>157,185원</td></tr>
+      <tr><td><strong>Top 40</strong></td><td>38.2억원</td><td>23,411개</td><td>149,909원</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 5. 타겟 고객 분석 -->
+<div class="card">
+  <h2>타겟 고객 분석</h2>
+  <div class="grid2" style="margin-bottom:20px;">
+    <div>
+      <h3 style="margin-bottom:8px;">기기별 클릭 비율</h3>
+      <div class="chart-wrap-sm"><canvas id="deviceChart"></canvas></div>
+    </div>
+    <div>
+      <h3 style="margin-bottom:8px;">성별 클릭 비율</h3>
+      <div class="chart-wrap-sm"><canvas id="genderChart"></canvas></div>
+    </div>
+  </div>
+  <div style="margin-bottom:20px;">
+    <h3 style="margin-bottom:8px;">연령별 클릭 비율</h3>
+    <div style="position:relative;height:200px;"><canvas id="ageChart"></canvas></div>
+  </div>
+  <div>
+    <h3 style="margin-bottom:8px;">요일별 클릭 비율</h3>
+    <div class="chart-wrap-sm"><canvas id="dayChart"></canvas></div>
+  </div>
+  <div class="insight" style="margin-top:16px;">
+    <strong>핵심 타겟:</strong> 모바일(89%) 중심, 여성(60%) 비율 높음, <strong>40대(28.98%)가 최대 고객층</strong>.
+  </div>
+</div>
+
+<!-- 6. 종합 평가 -->
+<div class="card">
+  <h2>종합 평가</h2>
+  <table class="score-table" style="margin-bottom:20px;">
+    <thead><tr><th>항목</th><th>점수</th><th>등급</th><th>기준값</th></tr></thead>
+    <tbody>
+      <tr><td>시장규모</td><td><strong>2점</strong></td><td><span class="badge badge-green">대형</span></td><td>월 검색수 30,350회</td></tr>
+      <tr><td>경쟁강도</td><td><strong>2점</strong></td><td><span class="badge badge-green">좋음 (B)</span></td><td>경쟁강도 3.82</td></tr>
+      <tr><td>트렌드</td><td><strong>0점</strong></td><td><span class="badge badge-red">하락</span></td><td>전년비 -44.9%</td></tr>
+      <tr><td>수익성</td><td><strong>0점</strong></td><td><span class="badge badge-red">낮음</span></td><td>Top10 6개월 8.1천만원</td></tr>
+    </tbody>
+  </table>
+  <div style="text-align:center;padding:20px;background:#f8fafc;border-radius:12px;">
+    <div style="font-size:2rem;font-weight:800;color:#d97706;">4점</div>
+    <div style="margin:8px 0;"><span class="badge badge-yellow" style="font-size:1rem;padding:6px 20px;">★☆☆ 신중검토</span></div>
+    <p style="color:#64748b;font-size:.9rem;margin-top:8px;">월 검색수 30,350회 대형 시장, 경쟁강도 좋음(B등급). 트렌드 하락(전년비 -44.9%), Top10 6개월 매출 8.1천만원으로 수익성 낮음. 총점 4점 → <strong>★☆☆ 신중검토</strong>.</p>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- 7. 상품 목록 -->
+<div style="padding:0 16px 32px;">
+<div class="card section-full" style="max-width:none;">
+  <h2>상품 목록 (Top 40)</h2>
+  <div style="overflow-x:auto;width:100%;">
+  <table id="productTable">
+    <thead><tr>
+      <th class="sortable" data-col="0" data-type="num">순위</th>
+      <th>이미지</th><th>상품명</th><th>카테고리</th><th>판매처</th><th>셀러등급</th>
+      <th class="sortable" data-col="6" data-type="price">판매가</th>
+      <th>배송비</th>
+      <th class="sortable" data-col="8" data-type="num">찜</th>
+      <th class="sortable" data-col="9" data-type="review">리뷰</th>
+      <th class="sortable" data-col="10" data-type="score">평점</th>
+      <th class="sortable" data-col="11" data-type="date">등록일</th>
+      <th>판매처 수</th>
+    </tr></thead>
+    <tbody>
+<tr><td style="color:#0284c7;font-weight:700;">1</td><td><img src="https://shopping-phinf.pstatic.net/main_8772194/87721944673.3.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title"><a href="https://smartstore.naver.com/main/products/10177441331" target="_blank" class="product-link">메디비고 EMS 저주파 발 마사지기 발바닥 아킬레스 종아리 족부맞춤관리기</a></td><td>다리/발마사지기</td><td>메디비고</td><td><span class="badge badge-green">빅파워</span></td><td>139,000원</td><td>0원</td><td>1949</td><td>2474건</td><td>4.83점</td><td>2024.04</td><td>1</td></tr>
+<tr><td style="color:#0284c7;font-weight:700;">2</td><td><img src="https://shopping-phinf.pstatic.net/main_5670756/56707562509.20260109140016.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">대성마리프 닥터라이프 V7MAX 공기압 마사지기 본체+다리</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>176,080원</td><td>묶음</td><td>526</td><td>9716건</td><td>4.88점</td><td>2025.09</td><td>236</td></tr>
+<tr><td style="color:#0284c7;font-weight:700;">3</td><td><img src="https://shopping-phinf.pstatic.net/main_5670573/56705739953.20260306171724.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">풀리오 종아리 마사지기 V3 P006 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>94,430원</td><td>묶음</td><td>114</td><td>9547건</td><td>4.84점</td><td>2025.09</td><td>90</td></tr>
+<tr><td>4</td><td><img src="https://shopping-phinf.pstatic.net/main_5694242/56942424187.20250926111742.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">LIGE 바디뷰 무선 온열 공기압 발 다리 종아리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>91,590원</td><td>묶음</td><td>259</td><td>359건</td><td>4.94점</td><td>2025.09</td><td>8</td></tr>
+<tr><td>5</td><td><img src="https://shopping-phinf.pstatic.net/main_5670581/56705819921.20260306172025.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">풀리오 풀리지 허벅지 종아리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>193,320원</td><td>묶음</td><td>116</td><td>4601건</td><td>4.8점</td><td>2025.09</td><td>15</td></tr>
+<tr><td>6</td><td><img src="https://shopping-phinf.pstatic.net/main_5753477/57534771339.20251103110035.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">릴렉서리 레그힐링 발 종아리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>259,000원</td><td>묶음</td><td>85</td><td>633건</td><td>4.76점</td><td>2025.11</td><td>2</td></tr>
+<tr><td>7</td><td><img src="https://shopping-phinf.pstatic.net/main_5776457/57764572582.20251114121139.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">풀리오 종아리 마사지기 V3 P005 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>94,630원</td><td>묶음</td><td>31</td><td>6722건</td><td>4.84점</td><td>2025.11</td><td>35</td></tr>
+<tr><td>8</td><td><img src="https://shopping-phinf.pstatic.net/main_8968215/89682156174.3.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title"><a href="https://smartstore.naver.com/main/products/12137645469" target="_blank" class="product-link">풀리오 폴리오 종아리 마사지기 V2 플리오</a></td><td>다리/발마사지기</td><td>코코구니</td><td><span class="badge badge-green">빅파워</span></td><td>108,000원</td><td>0원</td><td>291</td><td>151건</td><td>4.84점</td><td>2025.07</td><td>1</td></tr>
+<tr><td>9</td><td><img src="https://shopping-phinf.pstatic.net/main_5670860/56708601064.20260109090018.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">대성마리프 닥터라이프 LIFE3PLUS 공기압 마사지기 본체+다리</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>149,000원</td><td>묶음</td><td>308</td><td>1629건</td><td>4.85점</td><td>2025.09</td><td>144</td></tr>
+<tr><td>10</td><td><img src="https://shopping-phinf.pstatic.net/main_5694247/56942476736.20260129174100.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">이지넷유비쿼터스 넥스트유 렉쉼 저주파 EMS 종아리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>75,970원</td><td>묶음</td><td>48</td><td>33건</td><td>4.76점</td><td>2025.09</td><td>96</td></tr>
+<tr><td>11</td><td><img src="https://shopping-phinf.pstatic.net/main_5732562/57325622994.20251022113650.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">메디니스 클라우드 무선 발 마사지기 MDM-906 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>128,500원</td><td>묶음</td><td>25</td><td>102건</td><td>4.98점</td><td>2025.10</td><td>11</td></tr>
+<tr><td>12</td><td><img src="https://shopping-phinf.pstatic.net/main_5753458/57534583765.20251103102442.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">발란스핏 종아리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>64,000원</td><td>묶음</td><td>45</td><td>5254건</td><td>4.85점</td><td>2025.11</td><td>3</td></tr>
+<tr><td>13</td><td><img src="https://shopping-phinf.pstatic.net/main_5670582/56705823945.20250912124433.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">풀리오 종아리 마사지기 V2 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>81,000원</td><td>묶음</td><td>47</td><td>2382건</td><td>4.81점</td><td>2025.09</td><td>36</td></tr>
+<tr><td>14</td><td><img src="https://shopping-phinf.pstatic.net/main_8701893/87018938202.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title"><a href="https://smartstore.naver.com/main/products/9474437879" target="_blank" class="product-link">힐링리커버 저주파마사지기 EMS발마사지기 발바닥 종아리 다리 허벅지 기계</a></td><td>다리/발마사지기</td><td>셀트웰</td><td><span class="badge badge-yellow">파워</span></td><td>323,000원</td><td>0원</td><td>219</td><td>56건</td><td>4.82점</td><td>2023.11</td><td>1</td></tr>
+<tr><td>15</td><td><img src="https://shopping-phinf.pstatic.net/main_5670875/56708756239.20250912173256.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">제스파 더블에어 레그라이너 종아리 안마기 ZP1000 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>169,000원</td><td>묶음</td><td>61</td><td>1415건</td><td>4.8점</td><td>2025.09</td><td>7</td></tr>
+<tr><td>16</td><td><img src="https://shopping-phinf.pstatic.net/main_9012410/90124101397.1.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title"><a href="https://smartstore.naver.com/main/products/12579590541" target="_blank" class="product-link">V7MAX 공기압 다리 마사지기 의료용 사지압박순환장치 임산부 부종 종아리</a></td><td>다리/발마사지기</td><td>닥터라이프 공식몰</td><td><span class="badge badge-gray">새싹</span></td><td>200,000원</td><td>0원</td><td>40</td><td>3건</td><td>5점</td><td>2025.10</td><td>1</td></tr>
+<tr><td>17</td><td><img src="https://shopping-phinf.pstatic.net/main_5789026/57890261536.20260311105911.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">대성마리프 닥터라이프 무선 온열 공기압 종아리 발 안마기 DCM-25 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>128,000원</td><td>묶음</td><td>56</td><td>115건</td><td>4.65점</td><td>2025.11</td><td>41</td></tr>
+<tr><td>18</td><td><img src="https://shopping-phinf.pstatic.net/main_5673969/56739696461.20250915103339.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">제스파 레그 더 비트 종아리 발 마사지기 ZP4380 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>279,000원</td><td>묶음</td><td>73</td><td>2540건</td><td>4.81점</td><td>2025.09</td><td>11</td></tr>
+<tr><td>19</td><td><img src="https://shopping-phinf.pstatic.net/main_5670811/56708112067.20251119160744.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">제스파 더툴 400 에어슈 듀얼 발 종아리 다리 마사지기 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>109,000원</td><td>묶음</td><td>167</td><td>2385건</td><td>4.79점</td><td>2025.09</td><td>22</td></tr>
+<tr><td>20</td><td><img src="https://shopping-phinf.pstatic.net/main_5781031/57810314199.20251118145622.jpg" width="72" style="object-fit:contain;height:72px;"></td><td class="td-title">풀리오 종아리 마사지기 V2 PLO-CB227 본체</td><td>다리/발마사지기</td><td>묶음</td><td><span class="badge badge-gray">묶음</span></td><td>95,890원</td><td>묶음</td><td>8</td><td>30건</td><td>4.87점</td><td>2025.11</td><td>8</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+
+<script>
+const vertLine={id:'vertLine',beforeDraw(chart){const{ctx,chartArea,tooltip}=chart;if(!tooltip._active||!tooltip._active.length)return;const x=tooltip._active[0].element.x;ctx.save();ctx.beginPath();ctx.moveTo(x,chartArea.top);ctx.lineTo(x,chartArea.bottom);ctx.lineWidth=1;ctx.strokeStyle='rgba(2,132,199,0.3)';ctx.stroke();ctx.restore();}};
+new Chart(document.getElementById('trendChart'),{type:'line',data:{labels:["23.03", "23.04", "23.05", "23.06", "23.07", "23.08", "23.09", "23.10", "23.11", "23.12", "24.01", "24.02", "24.03", "24.04", "24.05", "24.06", "24.07", "24.08", "24.09", "24.10", "24.11", "24.12", "25.01", "25.02", "25.03", "25.04", "25.05", "25.06", "25.07", "25.08", "25.09", "25.10", "25.11", "25.12", "26.01", "26.02", "26.03 (\uc608\uce21)"],datasets:[{label:'월 검색수',data:[21670, 85370, 91860, 77550, 76740, 80180, 89080, 73920, 69960, 64300, 75430, 74640, 79470, 97170, 101680, 95720, 80830, 73910, 71160, 49430, 49420, 61010, 42450, 36970, 73770, 43540, 37950, 33650, 35850, 36010, 33740, 26030, 22420, 23950, 26690, 25410, 32240],borderColor:'#0284c7',backgroundColor:'rgba(2,132,199,0.08)',borderWidth:2,pointRadius:3,pointHoverRadius:5,fill:true,tension:0.3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#fff',titleColor:'#0f172a',bodyColor:'#64748b',borderColor:'#e2e8f0',borderWidth:1},datalabels:{display:false}},scales:{x:{grid:{color:'#f1f5f9'},ticks:{maxTicksLimit:12,font:{size:11}}},y:{grid:{color:'#f1f5f9'},ticks:{font:{size:11}}}}},plugins:[vertLine]});
+
+const sVals=[82, 78, 99, 128, 131, 118, 110, 108, 110, 85, 81, 85];
+new Chart(document.getElementById('seasonChart'),{type:'bar',plugins:[ChartDataLabels],data:{labels:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],datasets:[{data:sVals,backgroundColor:["#94a3b8", "#94a3b8", "#94a3b8", "#059669", "#059669", "#0284c7", "#0284c7", "#0284c7", "#0284c7", "#94a3b8", "#94a3b8", "#94a3b8"],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'top',font:{size:11,weight:'bold'},formatter:v=>v,color:'#0f172a'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'},min:0,max:160}}}});
+
+new Chart(document.getElementById('deviceChart'),{type:'bar',plugins:[ChartDataLabels],data:{labels:['모바일','PC'],datasets:[{data:[89,10],backgroundColor:['#0284c7','#94a3b8'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'top',font:{size:13,weight:'bold'},formatter:v=>v+'%',color:'#0f172a'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'},min:0,max:100}}}});
+
+new Chart(document.getElementById('genderChart'),{type:'bar',plugins:[ChartDataLabels],data:{labels:['여성','남성'],datasets:[{data:[60,39],backgroundColor:['#ec4899','#0284c7'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'top',font:{size:13,weight:'bold'},formatter:v=>v+'%',color:'#0f172a'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'},min:0,max:100}}}});
+
+new Chart(document.getElementById('ageChart'),{type:'bar',plugins:[ChartDataLabels],data:{labels:["10\ub300", "20\ub300", "30\ub300", "40\ub300", "50\ub300", "60\ub300"],datasets:[{data:[0.88, 9.55, 20.59, 28.98, 26.82, 13.19],backgroundColor:'#0284c7',borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'right',font:{size:11,weight:'bold'},formatter:v=>v+'%',color:'#0f172a'}},scales:{x:{grid:{color:'#f1f5f9'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('dayChart'),{type:'bar',plugins:[ChartDataLabels],data:{labels:["\uc6d4", "\ud654", "\uc218", "\ubaa9", "\uae08", "\ud1a0", "\uc77c"],datasets:[{data:[14.59, 14.53, 14.34, 14.44, 13.38, 13.81, 14.91],backgroundColor:'#0284c7',borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{anchor:'end',align:'top',font:{size:11,weight:'bold'},formatter:v=>v+'%',color:'#0f172a'}},scales:{x:{grid:{display:false}},y:{grid:{color:'#f1f5f9'}}}}});
+
+(function(){const parseVal=(text,type)=>{const t=text.trim();if(t==='-'||t==='외부'||t==='묶음')return -Infinity;if(type==='num')return parseFloat(t.replace(/,/g,''))||0;if(type==='price')return parseFloat(t.replace(/[,원]/g,''))||0;if(type==='review')return parseFloat(t.replace(/[,건]/g,''))||0;if(type==='score')return parseFloat(t.replace('점',''))||0;if(type==='date')return t;return t;};let sortCol=null,sortDir=1;document.querySelectorAll('th.sortable').forEach(th=>{th.addEventListener('click',()=>{const col=parseInt(th.dataset.col),type=th.dataset.type;if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}document.querySelectorAll('th.sortable').forEach(h=>h.classList.remove('asc','desc'));th.classList.add(sortDir===1?'asc':'desc');const tbody=th.closest('table').querySelector('tbody');const rows=Array.from(tbody.querySelectorAll('tr'));rows.sort((a,b)=>{const av=parseVal(a.querySelectorAll('td')[col]?.innerText||'',type);const bv=parseVal(b.querySelectorAll('td')[col]?.innerText||'',type);if(av===-Infinity&&bv===-Infinity)return 0;if(av===-Infinity)return 1;if(bv===-Infinity)return -1;return typeof av==='string'?av.localeCompare(bv)*sortDir:(av-bv)*sortDir;});rows.forEach(r=>tbody.appendChild(r));});})})();
+</script>
+</body>
+</html>
